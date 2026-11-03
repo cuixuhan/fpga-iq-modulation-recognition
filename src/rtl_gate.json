@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "source_manifest_sha256": "88a791e590e7b7308c1920bfe1d59e397bede4346a8ba99adce29d1ece202ee7",
+  "network_review_sha256": "edbd059f79f421f1ba07ed391f70059cbb3db7796d92cd6b4b60446f4342da52",
+  "reused_tests_sha256": "cc1846e8edc304e1184d5be62a02eaca79c66778b4049d215fa41b0132ac3520",
+  "reset_trace_sha256": "39e12c16e46c8a0425555d0e39b0e3e1233c2ed73b0d7819209b7b89ce706b4c",
+  "independent_G2": "PENDING"
+}
