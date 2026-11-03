@@ -2,6 +2,10 @@
 
 本工程使用 Artix-7 上的单处理单元执行稠密 INT8 CNN，识别 BPSK、QPSK、8PSK、16QAM 和 64QAM。输入为 I、Q 两路各 1024 个采样点。软件端可生成带噪信号、训练浮点基线并研究整数量化，硬件端通过 UART 接收输入和参数并返回推理结果。
 
+## 竞赛提交材料
+
+[报告、演示视频和完整工程校验信息](contest/README.md) · [公开报告 PDF](contest/design_report.pdf) · [封版源码 eeba9f7](https://github.com/cuixuhan/fpga-iq-modulation-recognition/tree/eeba9f71ec4658420ed7eae35c255baf9067780d)。
+
 ## 源码与附件
 
 | 目录 | 内容 |
