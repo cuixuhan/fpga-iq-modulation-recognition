@@ -1,5 +1,7 @@
 # 五类 IQ 调制识别 · 竞赛材料
 
+实物开发板为正点原子达芬奇 **ATK-DF7A35 V2.1**，板号与版本由背面 PCB 丝印确认。Vivado 工程目标器件为 `xc7a35tfgg484-2`。正反面照片见设计报告文末。
+
 [阅读设计报告 PDF](design_report.pdf) · [下载演示视频 MP4](https://github.com/cuixuhan/fpga-iq-modulation-recognition/raw/refs/heads/main/contest/demo.mp4) · [封版源码 eeba9f7](https://github.com/cuixuhan/fpga-iq-modulation-recognition/tree/eeba9f71ec4658420ed7eae35c255baf9067780d)
 
 视频时长约 3 分 17 秒，末段回放 2026 年 10 月 31 日采集的串口记录。报告第 9 章链接回本页及源码快照。公开报告保留协作案例，原始会话链接仅在评审附件中提供。
