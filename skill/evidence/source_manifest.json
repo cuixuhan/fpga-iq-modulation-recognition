@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "created_local_date": "2026-11-03",
+  "purpose": "Public historical snapshots; machine paths and JTAG identifier redacted where present. Original SHA256 retained separately. Not new hardware validation.",
+  "sources": [
+    {
+      "id": "S01",
+      "source": "skill_use/skill_day6/SKILL.md",
+      "snapshot": "evidence/snapshots/day6_skill.txt",
+      "sha256": "efd6daf3d3dc5b0fbfa24894c1c0ab32597ac4d0e267aadd5313b08fd7beaffe",
+      "bytes": 7713,
+      "original_sha256": "efd6daf3d3dc5b0fbfa24894c1c0ab32597ac4d0e267aadd5313b08fd7beaffe",
+      "public_redacted": false
+    },
+    {
+      "id": "S02",
+      "source": "skill_use/skill_day6/references/acceptance.md",
+      "snapshot": "evidence/snapshots/day6_acceptance_requirements.txt",
+      "sha256": "46e29a44c10396a2d306d6566e9d549d4b72aba8d2c16e71dc0e3cd25270047e",
+      "bytes": 5518,
+      "original_sha256": "46e29a44c10396a2d306d6566e9d549d4b72aba8d2c16e71dc0e3cd25270047e",
+      "public_redacted": false
+    },
+    {
+      "id": "S03",
+      "source": "sparse_cnn_fpga/runs/day6_acceptance_20260923T022204_272700Z/evaluation/integer_reference/metrics.json",
+      "snapshot": "evidence/snapshots/day6_integer_metrics.json",
+      "sha256": "5f317a3d73eaa2e3f46a479e32b1813c98171a744ff5f9d5988b337f5382b3f4",
+      "bytes": 10172,
+      "original_sha256": "5f317a3d73eaa2e3f46a479e32b1813c98171a744ff5f9d5988b337f5382b3f4",
+      "public_redacted": false
+    },
+    {
+      "id": "S04",
+      "source": "stage5/solo/audits/day1_20261025T052156_4682651Z_00547bae/acceptance_report.md",
+      "snapshot": "evidence/snapshots/day1_failure.txt",
+      "sha256": "91d47b8ce5d71fc27bed8176d906fe02bc93580c0bab692bef71608f1ee34d11",
+      "bytes": 8071,
+      "original_sha256": "fdb14143c70ddb9410db3c8e26b4f3f38f48280c73f4f206abc3bf95e7f32679",
+      "public_redacted": true
+    },
+    {
+      "id": "S05",
+      "source": "stage5/solo/audits/day1_20261028T051133_1197823Z_0a5576e6/acceptance_report.md",
+      "snapshot": "evidence/snapshots/day1_repair_acceptance.txt",
+      "sha256": "3c65be8f5a6339e71871c8c4b1cc68184cee48d47f9cb35b7d9aeeb9072fb4fc",
+      "bytes": 3834,
+      "original_sha256": "25940f4a91873b816ed3bcee4773740537114a91e486959943854302175df0c4",
+      "public_redacted": true
+    },
+    {
+      "id": "S06",
+      "source": "stage5/solo/audits/day2_20261030T164512_2133712Z_434f4019/acceptance_report.md",
+      "snapshot": "evidence/snapshots/day2_implementation_acceptance.txt",
+      "sha256": "3ba73aa1054c1aa74c21f6553c72d43bca5cd171b6ba83df6b76fd618bfd2286",
+      "bytes": 12147,
+      "original_sha256": "3ba73aa1054c1aa74c21f6553c72d43bca5cd171b6ba83df6b76fd618bfd2286",
+      "public_redacted": false
+    },
+    {
+      "id": "S07",
+      "source": "stage5/solo/audits/day3_20261031T1424220932507Z_483be63d/results.json",
+      "snapshot": "evidence/snapshots/day3_numeric_results.json",
+      "sha256": "134ab715245757e4f5001115c021f1148856ac0ce0b2acac66e4a391dd233482",
+      "bytes": 676,
+      "original_sha256": "134ab715245757e4f5001115c021f1148856ac0ce0b2acac66e4a391dd233482",
+      "public_redacted": false
+    },
+    {
+      "id": "S08",
+      "source": "stage5/solo/audits/day3_seal_20261031T1428523782209Z_7ec96d65/board_validation.md",
+      "snapshot": "evidence/snapshots/day3_seal.txt",
+      "sha256": "9a2a26b55db72d9f983bc88dfce3056cd710cff63aab0d8d991a258c94040e5b",
+      "bytes": 2965,
+      "original_sha256": "c8ccad9cd537854a0ec4d90706242e21ec37a9a038d52453632777cb7cb40ac3",
+      "public_redacted": true
+    },
+    {
+      "id": "S09",
+      "source": "stage5/solo/audits/terminal_20261102T024725Z_81ecb4d5/acceptance_report.md",
+      "snapshot": "evidence/snapshots/terminal_offline_acceptance.txt",
+      "sha256": "509ac64e9d2337b3403575e13b48157e5a3e07f0674c8e17356c80f666b604f7",
+      "bytes": 1843,
+      "original_sha256": "509ac64e9d2337b3403575e13b48157e5a3e07f0674c8e17356c80f666b604f7",
+      "public_redacted": false
+    }
+  ]
+}

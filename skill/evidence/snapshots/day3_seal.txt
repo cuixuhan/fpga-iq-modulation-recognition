@@ -1,0 +1,25 @@
+# Stage5 单人 G3 封版
+
+2026-10-31（Asia/Shanghai）。**G3=PASS，board=PASS，full_network_fpga_verified=true。**
+
+通过范围：固定Stage5 bit、固定样本ID2259/标签3/SNR -5的正常模式、诊断模式、stage1受控中断及新session完整重装恢复。不是所有模型/样本/故障情景通过。
+
+## 本次补证
+
+用户明确说明两轮之间断电。新增Vivado日志会话始于本地22:20:01，明确PROGRAM.FILE指向 <PROJECT_ROOT>/stage5/solo/runs/user_bit_917cfc36101d4ef5bcad17fd1df8c9f6/stage5.bit，目标xc7a35t_0，经program_hw_devices后startup HIGH；后续补测发生于22:21至22:22。磁盘bit SHA256仍为 `88918ff95385e3f813ba0deed8aac9c195803edc93aac48774519f1a27295930`，与原G2绑定DCP和bit_manifest相同。同一Digilent目标<JTAG_TARGET_REDACTED>也与前次下载日志一致；这是连接目标标识，不冒充唯一FPGA硅片DNA。
+
+因此本次补测开始时计数器清零由断电后重新下载解释，原唯一阻塞解除。session内YES声明不能再解释成跨两轮从未断电；本新记录明确更正该解释，不改旧原始记录。接受用户下载日志、完整路径与用户说明的关联证据，不声称工具现场下载或从硅片读回bit hash。
+
+## 已通过的技术证据
+
+前一审计 <PROJECT_ROOT>/stage5\solo\audits\day3_20261031T1424220932507Z_483be63d 对当前normal/diagnostic及补测interrupt/recovery重新运行独立冻结模型oracle，1603对原始帧检查通过、166172标量零差异。完整诊断覆盖98304 Conv INT8、1536 debug acc、两Pool各16384、GAP128与acc、Linear5 logits与acc和argmax；下一层输入映射依据同hash生产RAM/调度证据，无host后处理或激活回写。
+
+中断exit3；恢复exit0。恢复前仍为PAUSED，session/job/stage/token与中断一致；ABORT/CLEAR、新session、40708字节完整输入参数重装、一次START、计数增量1/3/5、DONE及数值均通过。改值、删尾比较器负向子进程exit1，CRC损坏拒绝。未将之前超过60秒进入ERROR的恢复拼成该项PASS；原PENDING记录保留。
+
+本轮重新核验前审计88项产物、其seal及9500项保护输入，全部匹配；仅补下载与断电事实，没有重跑板测或重复独立oracle。下载原文已原样保存并hash，完整原始数组、帧、命令、退出码与逐元素CSV在引用审计及其绑定capture中，未覆盖旧run/audit。
+
+## 保留的边界
+
+G2继续受有界RAM恢复假设约束，116条REQP-1840未消除，物理异步复位风险消除仍未证明。A2完整器件身份、比赛符合性分别PENDING。完整测试集准确率、功耗、硬件加速比未验证。模型输出[-92,3,11,1,0]、winner2，与标签3不同为模型预测错误，硬件一致性PASS不等于分类正确。
+
+此次是单人整合与离线独立验收，不伪造历史三方签字。Codex本轮无bit生成、串口、连接、下载或FPGA/Flash动作。

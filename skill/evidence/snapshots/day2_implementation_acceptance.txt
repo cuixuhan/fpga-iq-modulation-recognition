@@ -1,0 +1,84 @@
+# Stage5 Day2 修复后独立 G2 复验
+
+日期：2026-10-31，Asia/Shanghai。**G2=PASS；board=PENDING；full_network_fpga_verified=false。**
+
+仅验收用户固定的新交付 `day2_g2_repair_20261030T102733_6129025Z_a768ccc7`，delivery_manifest SHA256 为 `c4ad38b444a99677825581d709e6267d9e3b36ea6d62766c1a927586d8c707f8`。原失败审计与新交付均保持只读，未切换 LATEST，未改实现、约束或历史状态。按 INDEPENDENT_REVIEW.md 写入本审计 status.json 的 schema、evidence_kind、G2、implementation_decision、RAM_disposition、delivery 与四个互不混用的 hash 字段。
+
+## 独立性与本轮执行
+
+本轮新写 oracle.py，直接读取冻结模型 metadata/integers 与原始 dataset test[0]，核对 manifest、来源 hash、split 互斥、ID2259、不属于校准集、标签3/SNR-5。Conv 按 kernel offset 分解为 int64 矩阵乘加并检查 int32 界；量化使用 Python Fraction 精确分数与 round 的 ties-to-even，GAP/Linear 用 Python 整数求和，max-pool 显式邻项最大，argmax 取首个最大。没有导入 DUT、实施 oracle 或先前审计算术。logits=[-92,3,11,1,0]，winner=2；模型与标签不一致不修改预期。
+
+compare.py 独立解析 C/P/O/R 原始记录；检查种类、阶段、范围、重复、缺尾、精确字节长度、signed little-endian、winner字和所有原始内部acc。保存 expected/*.npy、comparisons/*/*.npy、逐元素 elements.csv、每次原始来源/hash与真实比较退出码。12份完整网络共4,217,330标量零差异，其中同生产源码原生 normal/diagnostic 为592,160，十个同步RAM故障模型恢复为3,625,170。normal 本身是ABORT后完整重装的第二次完成网络，未虚构第三条原生运行。13公共数组一致。新比较器五种负向输入均exit1。
+
+完整网络仿真使用已封存、同hash原始执行证据，本轮没有重新执行小时级网络仿真，也没有把实施方 LOCAL_PASS 当结论。实际新执行：独立oracle与全部数组比较、离线预检/host流程/捕获比较、五配置UNISIM与模型对照、独立故障负向仿真、只读重开真实routed DCP。新综合/place-route未运行，已证明生产RTL/XDC和原构建源/脚本/DCP一致后复用。
+
+## F1/F2/F3
+
+F1：根目录vectors与arrays/expected均可被真实消费者读取；全部expected清单项的dtype/shape/元素数/file和content hash已读回核验。冻结输入/参数与bin、各恢复mem一致。实际重跑22个离线host流程用例；normal/diagnostic两个捕获比较通过，改值、缺尾、缺文件、错误host版本、错误vector五例均真实拒绝。
+
+F2：新审计目录内构造明确标识的隔离schema fixture，使用真实DCP副本，共16例（1正向、15负向），包括缺文件、改值、长度、检查点篡改/错误hash/逃逸路径、G2/RAM未接受、错误交付/四种身份hash、timing失败。所有负向真实exit1。fixture中的模拟PASS仅绑定fixture自身，不可为固定交付放行。固定交付在本审计PENDING时实际preflight exit1；board_cli以禁止transport创建的哨兵实际验证，未触发transport且未建capture目录。bit主流程未调用；其与preflight共享require_g2，源码确认先预检再创建bit输出/启动Vivado。
+
+F3：操作单绑定固定绝对交付、真实CLI参数及检查点；help实际运行。复位条件、现场串口、用户bit/下载、normal/diagnostic、中断stage1、ABORT/CLEAR完整重装恢复、离线比较和回收条件齐全。全程不以LATEST替换对象。通过后仅放行用户后续D3准备，不把PLANNED操作写成已执行。
+
+## P1：接受有界隔离处置，未消除物理风险
+
+本轮独立决定接受 lifecycle_argument.md 的**有界数据/读输出损坏合同**，而非接受“RAM无风险”的命题。条件是时钟持续工作、复位至少保持5个完整周期、等待同步释放和协议就绪、损坏在稳定释放之前终止、控制FF按正常复位运行且配置无永久损坏。短毛刺、持续供电/时钟故障、配置/永久损坏不在本次G2通过范围。操作单已写明这些条件。若条件不能满足，此处置不适用，不能据本G2继续操作，应修改RAM控制架构或补充针对新故障边界的证据并重新验收。
+
+独立源码审阅：reset_sync异步断言、同步释放；pipeline_rst清control/Conv/Post/FIFO/adapter有效状态，共享RAM使能被门控；session、job、装载计数与输出有效性失效。adapter在新请求后经过真实同步读及等待才返回数据，旧q不直接作为有效响应。装载计数要求A2048、W35904、BI/MU/SH各916、GAP8字节完整后方可START。
+
+写先于读论证：对每地址引入数据无关有效位V，损坏后V=0；仅当前实际写提交置V=1，每个读必须V=1。因此在控制和地址按合同工作的前提下，恢复读值与任意旧RAM值无关。A初始输入由host完整写入；Conv1/2/3各生产B32768后才消费，Pool1/2生产A16384，GAP生产A128，Linear生产B5后argmax消费；参数在START前完整覆盖；DEBUG只读本阶段已完成窗口。同步模型把7个bank共102639逻辑字及q置X，并在每次读取时检查有效位，覆盖比单次误写更保守的数据损坏范围。此是源码生命周期推理和所测轨迹的不变量证据，未作全状态形式证明。
+
+五种实际native RAMB18E1/UNISIM配置与模型复跑219477次比较，涵盖全地址初始化/读取及混合读写、同址冲突抑制和保持。该有限对照支持同步读写语义；不模拟模拟电路亚稳态、异步EN物理行为或任意电气故障。新负向试验在32bit/229字bank的末地址228先写后poison，再未重写即读，准确触发READ_BEFORE_FRESH_WRITE fatal。XSim外层及内层exit0已原样保留，该case仅判预期拒绝通过，绝不视为正常功能仿真PASS。
+
+独立重开DCP再次取得116个唯一REQP-1840警告引脚，A32/B32/W36/BI4/MU4/SH4/DEBUG4，对应58个共享BRAM的双EN。警告仍存在，默认STA通过不覆盖此异步风险；RAM_disposition=ACCEPTED仅指上述有界恢复隔离处置获接受。physical_risk_eliminated=false。
+
+## P2：十个自然边界与完整恢复
+
+逐例核对实际编译源hash、xvlog/xelab/xsim命令与完成、原始trigger和阶段轨迹。GAP/Linear分别命中最后输出QUANT(4)、OBS(5)、最后响应WAIT_RSP(3)、末写提交前WRITE(6)、提交后FINISH(7)。case0..4为GAP index127，case5..9为Linear index4；写前/写后信号与地址1007f/20004符合源码和真实trace。测试由真实START自然到达，未force算子状态或写入黄金激活。
+
+每例均记录7个bank poison、旧会话/输出/未装载启动被拒绝、完整参数和输入重装、新session、依次阶段0..7，最终计数1/3/5以及TB COMPLETE和实际exit0。所有恢复数组使用本轮新oracle逐元素复核。十例属于同步RAM故障抽象，不冒充新的原生RAM全网或物理复位测试；既有原生normal/diagnostic与G1模块背压/复位证据仅在依赖hash一致的原范围继承。该矩阵不声称所有算子×所有周期穷尽。
+
+## 实现与约束
+
+17项生产RTL/XDC与parent及实际综合输入一致，原实际构建command exit0、完成日志及DCP hash一致。同源码复用成立，本轮只读重开DCP；没有write_checkpoint、bit生成或约束修改。器件xc7a35tfgg484-2、top stage5_board_top、Vivado2026.1。20ns setup WNS2.102ns、hold WHS0.068ns，TNS/THS0，失败端点0；22490可布线net全部完成，错误0。LUT15832/20800、FF10851/41600、DSP9/90、RAMB18=65/RAMB36=0，等效65≤80。
+
+check_timing内部未约束端点/无时钟/环均0。reset/RX/TX的既有异步例外命中4/2/1/1，未扩大false path；不能称这些I/O完成同步接口时序验证。CDC-3 Info1、CDC-9 Info3。DRC除上述116 RAM警告外有29条DSP流水线建议，未发现阻塞Error/Critical Warning；保留警告，不关闭检查或降低严重级别。非阻塞DSP建议结合实际时序余量接受。
+
+## 逐项状态
+
+|项目|状态|依据及范围|
+|---|---|---|
+|identity|PASS|6670 manifest/source/provenance comparisons; 0 mismatches; 1589 prior identity entries reread|
+|G1_inheritance|PASS|Original G1 scope; unchanged dependencies and bound prior direct G1-to-parent regressions|
+|F1|PASS|Root vector/expected layout, all array metadata, 22 host flow cases, positive/negative board comparisons|
+|F2|PASS|16 preflight cases including 15 rejection cases; fixed delivery PENDING gate rejected before transport; distinct four hash fields and actual DCP|
+|F3|PASS|Fixed absolute operation document, real help/CLI/schema; no LATEST target replacement|
+|normal_diagnostic_numeric|PASS|Independent oracle; 592160 scalars, zero mismatch; normal is complete second attempt after abort/reload|
+|recovery_numeric|PASS|10 bounded-model complete diagnostic recoveries; 3625170 scalars, zero mismatch|
+|independent_comparator_negative|PASS|Changed value/missing tail/duplicate/unknown index/X rejected with actual exit1|
+|P1|PASS|ACCEPTED only under explicit bounded RAM data/output corruption and clock/reset assumptions; 116 REQP-1840 remain|
+|P2|PASS|Ten natural GAP/Linear boundaries verified from bound source/raw logs; full reload and stages0..7 after each; no exhaustive phase claim|
+|native_RAM_model_equivalence|PASS|Fresh five-configuration finite UNISIM comparison, 219477 checks; not physical/analog proof|
+|fault_guard_negative|PASS|Fresh independent last-address228 stale read gives exact expected fatal; outer and inner xsim exit0 do not turn fatal into functional PASS|
+|execution_integrity|PASS|Native reused compile/elab/sim exits and completion reread; ten recovery exits0 and completion; attempts1/2 excluded|
+|same_source_implementation_reuse|PASS|17 production RTL/XDC dependencies identical; build source/script/command/routed DCP matched|
+|timing_route|PASS|Fresh read-only DCP:20ns setup2.102ns hold0.068ns;TNS/THS0;22490 routed;0 errors|
+|resources|PASS|LUT15832/20800,FF10851/41600,DSP9/90,BRAM18eq65<=80|
+|CDC_constraints|PASS|CDC-3 Info1,CDC-9 Info3;0 unconstrained internal endpoints;reset/RX/TX explicit exceptions preserved|
+|DRC_disposition|PASS|116 RAM warnings conditionally accepted by bounded containment;29 DSP pipeline suggestions;no blocking error;not warning-free|
+|version_protection|PASS|Enumerated delivery/original audit and model source hashes unchanged|
+|fresh_full_network_XSim|NOT_STARTED|Raw same-version networks reused; fresh oracle/comparisons and short RAM simulations executed|
+|new_synthesis_place_route|NOT_STARTED|Same-source actual build reused; checkpoint freshly reopened|
+|bit_generation|NOT_STARTED|Prohibited|
+|physical_UART|NOT_STARTED|Prohibited; transport sentinel called zero times|
+|FPGA_Flash|NOT_STARTED|Prohibited|
+|board|PENDING|Requires separate user-performed D3 physical evidence|
+|A2_competition_performance|PENDING|Outside current audit evidence|
+
+## 执行异常与封存
+
+首次裸python命中WindowsApps不可用别名，未执行审计脚本；改用明确的bundled Python。第一次Vivado受沙箱访问限制而exit1，完整错误日志在commands/dcp；经批准后commands/dcp_retry成功。保留失败，未将其记为DUT失败或静默覆盖。所有新工具cwd/TEMP/TMP位于本审计目录。十例原实施attempt1/2只作失败历史，实际接受的数据来自绑定的attempt3。
+
+commands下保留实际argv/cwd/起止/exit/stdout/stderr和环境。protection_after.json列明固定交付与原审计全部枚举文件前后无变化，冻结来源重新核验；不宣称全盘扫描。审计manifest绑定本次产物。未生成bit、未打开真实串口、未连接/下载/操作FPGA或Flash。
+
+下一步仅由用户按固定交付board_operation.md执行D3，并保留本审计status身份和bit/source/DCP绑定。board与物理风险验证仍PENDING；后续任何生产源码/XDC/交付清单改变或超出有界恢复假设，须重新分析影响并复验，不能沿用本PASS。

@@ -1,0 +1,61 @@
+# D1 独立验收
+
+审计日期：2026-10-25（Asia/Shanghai）。**G1 = FAIL**。目标从 LATEST 唯一定位，没有挑选 PASS run；不修改实现、current、LATEST 或历史证据。
+
+- 审计目录：`<PROJECT_ROOT>/stage5\solo\audits\day1_20261025T052156_4682651Z_00547bae`
+- 被审交付：`<PROJECT_ROOT>/stage5\solo\runs\day1_delivery_20261025T030106_446657Z`
+- 绑定实际运行：`<PROJECT_ROOT>/stage5\solo\runs\day1_20261025T025522_549513Z`
+- 合同 SHA256：`299f7e0affff005610d90d8a9e4e49bec144c3450113176fb482fba19e7d45c0`
+- 顶层 SHA256：`9ddea8f69287309b3a6f590163458727e4b89fa7237e1143fd6e83d416f8ff29`
+- 被审模型 SHA256：`783a57ce45999f861b38a9a8433b3fb8e2bf6d0293d776192882fd78f112bb04`
+
+## 阻塞 F2：交付模型仍允许新版禁止的读权限
+
+`source_snapshot/checks/control_model.py:202` 的 `host_window` 对读操作沿用旧版子窗口语义。独立实际调用 `host_window(q, 1, 1, False)` 返回 `('register','VERSION',1)`，而 `contracts/solo_interface.md:11` 明确只接受首地址且精确长度的完整寄存器读取。生产顶层对同一请求实测返回 ACCESS=3。这是**交付可执行模型与合同不一致**，不是数值 RTL 错误。原始证据：permission_model_results.json、permission_rtl.csv、permission_sim.stdout.txt（TB COMPLETE，真实 exit=0）。这里仿真 exit=0 表示对照测试完成，不消除模型 FAIL。
+
+另一个实测分歧：BEGIN_LOAD、SESSION、写 A[0]=7 后，模型允许 LOAD 阶段 A[0] 读，生产 RTL 返回 NOT_READY=6。LOAD 读策略应在合同明确并同步模型/RTL；首个 VERSION 子窗口问题已经足以阻塞 G1，不依赖对第二项作额外推断。
+
+解除条件：实施方在新版本中同步模型与当前合同读权限；若要改变接口，则正式修订合同、wire/host 和 RTL，而非仅改验收预期。保留本 FAIL，交付新源/合同 hash，在新的独立 audit 复验这两个请求及邻近完整/偏移/越界/长度/状态读矩阵；受影响 Conv/Post 计数与集成重新验证。审计没有修实现。
+
+## 实际通过范围
+
+独立 oracle 从冻结 integers.npz、metadata 和原始 dataset test row0 重算，Python 任意精度累加/divmod ties-even；只读取 reload_inputs_expected.npz 的 input，未读取其 expected。模型 provenance 路径迁移以 hash 验证；split 集合不相交，样本 ID2259/label3/SNR-5 与原始来源吻合。没有导入 DUT 算术或 person1/既有 expected 生成器。随后才读取历史 expected 作对照，14 组 dtype/shape/count/file/content hash 和逐值检查通过。
+
+本轮独立实际比较 **247498 标量，0 差异**，详见 comparison_summary.json 和 item_comparisons.jsonl。包括：真实 Conv1→Pool1 normal/diagnostic 前缀（各81920探针数值），诊断原始字节/debug，隔离 Post 链路 acc/输出/debug/argmax；新增两种 Pool 形状、GAP 第256项、Linear 第128项/bias一次、负数 ties-even/饱和、非法-128权重/M/shift、自然 MAC 溢出和首个 tie。检查器实际拒绝改值、缺尾、重复索引、X/Z（checker_negative.json）。
+
+计数模型独立27案例与 RTL 边界27案例完成，八个阶段0/MAX-1/MAX、重复START/reset与饱和fatal；top控制45项原始行复核、49实际端口逐一核对。同步RAM E+2有效/E+3消费、stall、reset flush，13区域尾字节/word实际读回通过。CRC桥8帧独立解码；19份64B错误记录实际读取并逐字段核对。host离线13项覆盖CRC/半帧/seq/权限、deadline、未知执行状态、不重发WRITE/START与完整重装，装载字节逐项与本次向量一致。
+
+48个交付来源条目均核实；已测试RTL/TB/合同与交付hash一致。`checks/seal.py` 在实际run与最终交付间不同，已单列，未用于功能验收。215个历史产物/向量hash匹配。新保护前后清单2900文件无变化；范围见protection_check.json，不宣称全盘保护。
+
+真实源表与XSim展开包含生产Conv分支、MAC/requant、p1算子、共享RAMB18E1、adapter、control、CRC bridge和board wrapper。前缀只装入原始输入/参数，无黄金层间注入。tb_post_memory以独立Conv3结果作为**隔离单元刺激**，单列，不能充当整网数据链证据；边界TB使用人工构造数值刺激。66 BRAM18仅静态估算，实测资源为null。
+
+## 仍未闭合的必验项
+
+1. 完整顶层 GAP/Linear 自然生成 acc→debug RAM→host 帧读回，以及同一尾链 normal/diagnostic 的完整对照尚未执行。本次隔离 Post debug 读回和前缀顶层读回不能拼成这条证据。
+2. 自然 producer 错误经完整顶层到错误记录仍缺；本次非法参数/真实MAC溢出在生产Post+RAM单元链路运行，顶层错误映射仍是明确的force/状态故障注入证据。
+3. 所有请求/响应/写/obs stall 的完整 payload/tag 稳定轨迹、自然到达各相位的reset/末commit竞争矩阵尚不完整。现有trace和TB断言支持列明的范围，不能以覆盖数字45替代剩余项。
+
+上述标PENDING；完整逐项状态见acceptance_matrix.json。因F2实际FAIL，G1不是PENDING、更不是PASS。
+
+## 历史和工具失败保留
+
+person2 074340独立FAIL未改写。本轮重新运行旧hash模型，八个Conv/Post stage的MAX故障均复现；solo新hash模型/调度的F1边界复验仅在solo范围PASS。person2 current自测不覆盖旧独立FAIL。
+
+旧Stage4仍为单样本混网，person1仍为模块自测，person2为合同/Python模型等级。旧全网watchdog/非法读及后续错误来源/WINNER重复计数失败均保留；本轮读取原始日志确认曾有outer exit0且inner fatal。错误来源及重复WINNER在当前hash定向回归通过，不追改历史。
+
+本轮首次XSim展开因受限环境中Vivado GCC DLL重定位失败（7个真实exit1）；获准同目录离线重试后成功。审计自建TB首次编译声明顺序错误exit1，失败源副本保留，纠正的只是审计TB。首次bootstrap将未执行的seal.py差异等同于全部测试源不一致而assert退出，随后按文件类别核实后继续；两次记录均保留。一次工具审批服务用量限制使写入未执行，未伪记成功。命令/版本/argv/cwd/UTC起止/真实exit/stdout/stderr见commands.json；计划命令另列PLANNED且exit=null。
+
+## D2先补清单
+
+1. 修F2权限模型分歧，明确LOAD读策略，新hash交付并独立重跑失败/邻近读矩阵；保留F1 Conv/Post边界与受影响集成回归。
+2. 补顶层GAP/Linear实际诊断读回、自然producer错误记录，以及剩余stall/reset/末commit原始轨迹；独立逐值比较后重新做G1合取。
+3. G1过后再执行完整八阶段RTL：三Conv98304 acc/98304 INT8、两Pool各16384、GAP128、Linear5、argmax；normal/diagnostic及错误恢复分别留原始actual。不得向中间层注入黄金答案。
+4. 全网RTL未过不进入综合/route。后续50MHz setup/hold、未约束路径、CDC/DRC和80 BRAM18门槛独立判定。本审计综合/route/bit/串口均NOT_STARTED，板测和A2/比赛符合性PENDING。
+
+## 复现与交接
+
+阅读顺序：status.json → acceptance_matrix.json → 本报告 → permission_model_results/permission_rtl → comparison_summary/item_comparisons → coverage/execution_review → commands/source/model/vector/protection hashes。
+
+重新运行必须新建唯一audit，复制本审计脚本；bootstrap从固定交付快照绑定（若审新版本须明确换目标且记录新hash），independent_oracle自建向量，execute_simulations运行已核查入口，execute_boundary和supplemental_tests运行审计补充TB，permission_consistency复现F2，再执行独立比较。不要在本封存目录重跑覆盖数据。全部工具cwd和TEMP/TMP位于该新audit；不得执行source_snapshot/checks/run.py（它会更新LATEST），不得执行build_route.tcl。
+
+人工工时与代理活跃工时未知为null；commands的工具墙钟仅表示已记录子进程，不能等同人工投入。

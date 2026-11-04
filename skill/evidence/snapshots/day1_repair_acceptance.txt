@@ -1,0 +1,24 @@
+# D1 普通输出窗口修复后独立验收
+
+审计目录：<PROJECT_ROOT>/stage5\solo\audits\day1_20261028T051133_1197823Z_0a5576e6
+唯一交付：<PROJECT_ROOT>/stage5\solo\runs\day1_delivery_20261028T001134_941340Z_a0c9fb27
+源码清单SHA256：b87c17dc5601a5eb5fa018d8f83aaa48f9ef02dfb3a441aa3a800e6ccc24825a
+合同SHA256：b147e6c4d1041d59364c36c8c6a2521431b2f97597c6866f0d52979837cafbe1
+
+**独立 G1 = PASS（D1范围）。** 本轮新审计替代旧审计对旧hash的FAIL，不修改旧FAIL、实现或指针。
+
+七阶段普通输出游标错误、自然Pool1 0x10001/1B现均为LENGTH_SEQUENCE4；未授权/越界ACCESS3。762权限矩阵、97debug边界、96输出边界及七个原失败用例共962行由审计独立策略重新计算预期，model/RTL/host一致。新增96项副作用验证成功发送前不推进、拒绝后不推进；此前Pool1 debug=3及LOAD跨region=3/合法region=6保持。
+
+实际重跑模型27及RTL27计数/fatal、top45、adapter9、CRC bridge8、host13；旧person2 Conv uint64溢出FAIL只读复现，当前实现分别验证。9算术边界33594值零差异。自然前缀131584值和normal前缀81920值逐项比较通过。真实共享RAM、串行128 Linear及49端口已核对。
+
+本次额外运行当前hash完整八阶段diagnostic；362517标量零差异，真实GAP128/Linear5 acc经debug RAM到host帧读回，原始input/完整参数装载，未注入黄金中间激活。normal前缀81920标量与本次完整diagnostic一致。完整normal未运行，留D2，不把旧hash正常模式PASS转移。
+
+自然Conv/Linear producer错误原码、映射码、64B上下文、失效/清除通过；Linear之前真实网络前缀与本轮oracle比较。恢复覆盖：Conv清除→完整重装→首个物理commit→ABORT；Linear清除→新session/LOAD→未装载START拒绝。完整第二次推理恢复PENDING，属于D2继续覆盖；本次不声称完整恢复。G1要求的错误传播/清除不复活旧结果已实际检查。
+
+完整payload/address/tag物理背压轨迹、7自然Post reset相位、最后响应及末commit前4/后5次写；8自然顶层reset、末commit前16383/后16384次A写和旧session失效通过。属于列明的有限公共协议覆盖，不是所有算子×所有周期穷尽。比较器对受控单值修改副本返回exit1，原始数组未改。
+
+首次两条长仿真中断，无完成标记、exit未知，保留interrupted_attempts及原始部分输出为PENDING；最终结论仅采用resume_complete的新运行。17项完成的仿真真实exit0、TB COMPLETE、数量/原始数据核验，无inner fatal。两次辅助准备失败（PowerShell引号错误、已导入模块未刷新导致NameError）均exit1且未执行DUT；更正后完成，原错误单列setup_diagnostics。完整argv/cwd/TEMP/TMP/版本/起止/退出码/stdout/stderr及逐项比较见all_commands_review和evidence_manifest。9130个保护文件前后hash一致。Stage4混网、person1模块RTL自测、person2 Python模型分别保留等级；66 BRAM18仅拓扑估算。未综合、route、bit、串口或FPGA/Flash操作。
+
+本聊天曾实施修复，本次只读隔离、新建oracle及审计策略、实际重跑；不是另一个独立人员的盲审。无需假定聊天切换本身提供独立性。
+
+下一步：D2先跑当前hash完整normal和恢复后完整第二次推理，再评估全网RTL关口；通过后才能执行另行授权的综合/place-route检查。G1 PASS不等于G2或板测通过。审计复现需新目录，复制审阅bootstrap/prepare_jobs/run_short、independent_permission_policy、cursor_effects、两个resume_complete/run.py和retry_complete/tb_top_natural_reset/run.py及review_long；绑定本固定delivery，禁止原地覆盖本审计。当前矩阵及原始证据为唯一结论依据。

@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "purpose": "Public redacted skill package, excludes this manifest",
+  "files": [
+    {
+      "path": "assets/example/actual.csv",
+      "bytes": 119,
+      "sha256": "5cfe0526424504b3fdae1377627763ad2e5f262382728335c762c3c4cda732b4"
+    },
+    {
+      "path": "assets/example/expected.csv",
+      "bytes": 119,
+      "sha256": "5cfe0526424504b3fdae1377627763ad2e5f262382728335c762c3c4cda732b4"
+    },
+    {
+      "path": "assets/example/schema.json",
+      "bytes": 277,
+      "sha256": "a2c649c06b8af3a32828ae4d8f7a913d99bf61725f5c69ce1b3e143cfb7a11e0"
+    },
+    {
+      "path": "assets/result_template.md",
+      "bytes": 1148,
+      "sha256": "c0d63455ee7f44559889cc39f409c33cd97be454ddb11b0708a67d022153159a"
+    },
+    {
+      "path": "evidence/snapshots/day1_failure.txt",
+      "bytes": 8071,
+      "sha256": "91d47b8ce5d71fc27bed8176d906fe02bc93580c0bab692bef71608f1ee34d11"
+    },
+    {
+      "path": "evidence/snapshots/day1_repair_acceptance.txt",
+      "bytes": 3834,
+      "sha256": "3c65be8f5a6339e71871c8c4b1cc68184cee48d47f9cb35b7d9aeeb9072fb4fc"
+    },
+    {
+      "path": "evidence/snapshots/day2_implementation_acceptance.txt",
+      "bytes": 12147,
+      "sha256": "3ba73aa1054c1aa74c21f6553c72d43bca5cd171b6ba83df6b76fd618bfd2286"
+    },
+    {
+      "path": "evidence/snapshots/day3_numeric_results.json",
+      "bytes": 676,
+      "sha256": "134ab715245757e4f5001115c021f1148856ac0ce0b2acac66e4a391dd233482"
+    },
+    {
+      "path": "evidence/snapshots/day3_seal.txt",
+      "bytes": 2965,
+      "sha256": "9a2a26b55db72d9f983bc88dfce3056cd710cff63aab0d8d991a258c94040e5b"
+    },
+    {
+      "path": "evidence/snapshots/day6_acceptance_requirements.txt",
+      "bytes": 5518,
+      "sha256": "46e29a44c10396a2d306d6566e9d549d4b72aba8d2c16e71dc0e3cd25270047e"
+    },
+    {
+      "path": "evidence/snapshots/day6_integer_metrics.json",
+      "bytes": 10172,
+      "sha256": "5f317a3d73eaa2e3f46a479e32b1813c98171a744ff5f9d5988b337f5382b3f4"
+    },
+    {
+      "path": "evidence/snapshots/day6_skill.txt",
+      "bytes": 7713,
+      "sha256": "efd6daf3d3dc5b0fbfa24894c1c0ab32597ac4d0e267aadd5313b08fd7beaffe"
+    },
+    {
+      "path": "evidence/snapshots/terminal_offline_acceptance.txt",
+      "bytes": 1843,
+      "sha256": "509ac64e9d2337b3403575e13b48157e5a3e07f0674c8e17356c80f666b604f7"
+    },
+    {
+      "path": "evidence/source_manifest.json",
+      "bytes": 4086,
+      "sha256": "ccb67f08ed23c0955cc73a2af98efd3904fba43cf5d7383dcff16bfe94957bdf"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5837,
+      "sha256": "af23294ccb335c3170bdbab56bd09f79f4bf6704d2c33c27910e58a9230455ef"
+    },
+    {
+      "path": "references/cases.md",
+      "bytes": 4478,
+      "sha256": "b495712f521767a5acbaf416759c33c47e5bbbb5561269818a18cd05510c5dcc"
+    },
+    {
+      "path": "references/integer_contract.md",
+      "bytes": 2571,
+      "sha256": "5388630c1c4414a07881818def5448c0118421e0db28be3bba15d0f0ae3f8a18"
+    },
+    {
+      "path": "references/prompts.md",
+      "bytes": 1783,
+      "sha256": "813e393988b64cd31023467c42e5090e5e433620d7897d19b6ba2126d3dd32ca"
+    },
+    {
+      "path": "references/tools.md",
+      "bytes": 2979,
+      "sha256": "ff082e9d144770b62521966890cd126dfc7799c1f81913013cc14a2eaf8d3e16"
+    },
+    {
+      "path": "references/workflow.md",
+      "bytes": 4042,
+      "sha256": "5958200df20ddb78384fbeaf1807cc3485b0ef05bcc28bed653d2adf0caceb1a"
+    },
+    {
+      "path": "scripts/check.py",
+      "bytes": 7762,
+      "sha256": "bb8922f9f44eeac7d6c40032fc23a2c4ed8be0f752793960aa39998b870173f9"
+    },
+    {
+      "path": "scripts/self_test.py",
+      "bytes": 6718,
+      "sha256": "243783ec0633cc0dad0a9fbb4a20f5f853ef1f9936fdb0604cbd8df2802c1b4a"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 3806,
+      "sha256": "f86891cc2eab0340f8506c61f5a0fdb29d889e1a7af4afdb070535f954f06638"
+    },
+    {
+      "path": "validation/validation_report.md",
+      "bytes": 1195,
+      "sha256": "abc96bfe1a71ba110990bb460cb1a9ff6cc48049796c51c392ded385d550364a"
+    },
+    {
+      "path": "validation/verification.json",
+      "bytes": 9869,
+      "sha256": "3f3d22a50d79b65f91c8788a5e8cc254816375d4aa32c0591f9db850bf701d42"
+    }
+  ]
+}

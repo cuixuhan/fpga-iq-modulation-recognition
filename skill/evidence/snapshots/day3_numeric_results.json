@@ -1,0 +1,32 @@
+{
+  "captures": [
+    {
+      "mode": "normal",
+      "frames": 222,
+      "elements": 6
+    },
+    {
+      "mode": "diagnostic",
+      "frames": 818,
+      "elements": 132880
+    },
+    {
+      "mode": "interrupt",
+      "frames": 329,
+      "elements": 33280
+    },
+    {
+      "mode": "recovery",
+      "frames": 234,
+      "elements": 6
+    }
+  ],
+  "total_elements_including_interrupted_stage0": 166172,
+  "bit_sha256": "88918ff95385e3f813ba0deed8aac9c195803edc93aac48774519f1a27295930",
+  "port": "COM11",
+  "numeric": "PASS",
+  "wire_frames": "PASS",
+  "recovery": "PASS",
+  "download_identity": "PENDING",
+  "board_identity": "PENDING"
+}

@@ -1,0 +1,8 @@
+tensor,index,value
+activation,0,-128
+activation,1,-2
+activation,2,0
+activation,3,127
+logits,0,4
+logits,1,-1
+winner,0,0

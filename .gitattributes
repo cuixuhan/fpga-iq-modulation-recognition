@@ -1,0 +1,3 @@
+
+# Preserve byte hashes in the independently verifiable skill package.
+skill/** -text

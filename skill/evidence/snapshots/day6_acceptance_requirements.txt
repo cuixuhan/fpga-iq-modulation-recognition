@@ -1,0 +1,66 @@
+# Day 6 验收标准
+
+## 完成判定
+
+必须项有真实本次证据，才报告 Day 6 完成。逐项分为通过、失败、未验证；不要把缺失测试标成通过。整数正确性验收与准确率质量目标分别记录。
+
+准确率不要求提升，也不默认与 Day 5 完全相同。如项目没有预先约定下降门槛，报告真实 pp 和差异归因，将产品质量门槛标为未设定，不事后挑一个可通过阈值。固定点参数精度目标必须在评估测试集前确定。
+
+## 前置与保护
+
+- 源 dataset/checkpoint/history 与 Day 4 哈希相符；冻结 Day 5 run 路径、量化参数和文件哈希可追踪。
+- 保持模型、train/val/test、label mapping；校准 ID 唯一、属于 train 且与 val/test 隔离；不重新搜索校准。
+- 运行前后冻结来源和历史实验哈希不变。实现模式允许的源代码修改单独列明；仅验收模式实现及测试哈希也须不变。
+- FP32 逐样本回归 Day 4；主方案 fake-quant 回归冻结 Day 5；环境差异导致误差须解释，不能只比四舍五入准确率。
+
+## 必需测试
+
+| 项目 | 证据要求 |
+|---|---|
+| 有符号舍入 | 正负半整数、奇偶、零、shift=0；与独立整数 oracle 精确相同 |
+| 饱和/转换 | 上下界、界外、极值；clip 前不能转 INT8 造成回绕 |
+| 参数生成 | per-channel scale 对应 Cout；M/shift 可处理 ratio 大于/小于/等于 1；误差界满足预设精度规则 |
+| bias | 使用融合后 bias；scale=Sx*Sw；正负值、半整数、INT32 边界及非法参数 |
+| Conv1D | 手算小张量、多输入/输出通道、非零 Zx、padding、负数、不同尺度；acc 和输出均对照独立 oracle |
+| Linear | 独立手算与 per-channel 重定标；不允许浮点矩阵乘法替代 |
+| ReLU/MaxPool | 实数零对应零点；共享网格最大值正确；边界与负数 |
+| GAP | 先居中求和，再用含 L 的比例重定标；正负和及不同长度；不额外截断 |
+| 位宽 | 累加含 bias 的理论界及实际 extrema；定点乘积独立检查；失败时不静默 wrap |
+| 完整网络 | 输入 (B,2,1024)，输出 (B,5)，所有核心算子使用整数；B=1 与多 batch 的一致性 |
+| 冻结性 | 前后量化参数、模型权重和输入未被算子修改 |
+| 导出重载 | INT8 权重/INT32 bias dtype 正确；仅从包恢复，全测试输出精确一致 |
+| 回归 | Day 1–5 原有测试继续通过，不删测试或硬编码答案 |
+| 防覆盖/日志 | 已有目录拒绝覆盖；失败运行也保存真实退出码与日志 |
+
+测试输出精确一致仅针对同一整数合同的实现与独立 oracle，不要求 integer 与 fake-quant 逐位一致。全测试集可运行矢量化实现；慢速 oracle 用固定小向量及覆盖各层的子问题，不必对全数据执行 Python 三重循环。
+
+## 必需新运行产物
+
+名称按工程适配，报告明确每项准确路径：
+
+- `config.json` / `integer_contract.json`：来源、算术版本、seed、batch、线程、dtype/layout、量化参数、位宽、M/shift、舍入/饱和规则、环境版本。
+- `commands.json`、测试与评估 stdout/stderr：命令、cwd、时间、真实退出码；解码失败保留原始日志，不推测退出码。
+- `source_hashes.json`：冻结文件运行前后哈希及来源比对。
+- 独立可加载的模型包：INT8 weights、INT32 biases、整数 M/shift、metadata 和 manifest/hash。
+- `test_vectors/`：小规模整数输入、参数、acc、期望输出、布局、算术版本；可供后续实现复用。
+- `comparison_summary.csv`：FP32、W8A8 fake-quant per-channel、integer-reference 的 correct/total/accuracy，分别相对 FP32 和 fake-quant 的 delta pp。
+- 各方案逐样本预测与 logits、overall/per-class/SNR/class×SNR、混淆矩阵；logits 同时注明整数码或反量化值。
+- `layer_error.csv`：整数/oracle 精确比较，以及 fake-quant/integer 同尺度 MAE/MSE/max；局部与传播误差明确区分。
+- `integer_ranges.csv`：每层累加界、实际 extrema、定点乘积范围和饱和计数/比例。
+- 准确率、SNR、类别×SNR、混淆矩阵及逐层误差图；解码并目视检查单位、标签与裁切。
+- `verification.json` 与验收报告：通过/失败/未验证、重载、回归、隔离、哈希、缺口和最小建议。
+- 状态记录：真实变更、结果路径、未执行可选项。若用户仅允许写新目录，将状态摘要写入该目录。
+
+## 独立复核
+
+1. 从预测与原始 test ID/标签/SNR 核对顺序，重新计算整体、类别、SNR、交叉分组和混淆矩阵。
+2. 验证正确数/总数、矩阵对角线和 delta pp；保存 confidence 时与 logits 的 softmax 一致，并说明不是校准概率。
+3. 复核量化码到实数的尺度转换、逐层误差、范围及饱和统计，不能只看最终准确率。
+4. 导出包重载后逐元素一致；独立 oracle 的 mismatch_count 为零。
+5. 在报告中区分本次证据与仅作为来源的 Day 4/5 历史产物。
+
+## 不作为完成条件的项目
+
+per-tensor 全网扩展、校准扫描、多 seed、QAT、剪枝、稀疏存储、零跳过、真实加速内核、速度对比、硬件资源估算及 FPGA。没有执行就写未执行，不宣称已有证据。
+
+MAC 次数不因整数化减少。raw weight bytes 与包大小分开；bias、M/shift、scale/zero-point 和封装开销单列。软件 INT64 安全模拟也不能被描述为已验证硬件 INT32 数据通路。

@@ -1,0 +1,341 @@
+{
+  "status": "PASS",
+  "evidence_kind": "artificial_fixture_and_package_portability",
+  "time_utc": "2026-11-04T05:56:45.823014+00:00",
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "case_count": 22,
+  "passed": 22,
+  "cases": [
+    {
+      "name": "equal_including_int8_edges",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "stdout": {
+        "status": "PASS",
+        "evidence_kind": "normalized_integer_csv",
+        "tensors": 1,
+        "elements": 4,
+        "mismatch_count": 0,
+        "first_mismatches": [],
+        "input_sha256": {
+          "schema": "e45ea254cd2a3608ddd40379ecdff902c1a82edb5fc7e90f41cb923346958ce7",
+          "expected": "b00fdec56559ef51a1c163e183fbc9895c8ca3ce64d9db7f0273fd0e66afcb09",
+          "actual": "b00fdec56559ef51a1c163e183fbc9895c8ca3ce64d9db7f0273fd0e66afcb09"
+        },
+        "limitation": "Does not parse wire frames, compute an oracle, or prove classification accuracy."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "row_order_independent",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "stdout": {
+        "status": "PASS",
+        "evidence_kind": "normalized_integer_csv",
+        "tensors": 1,
+        "elements": 4,
+        "mismatch_count": 0,
+        "first_mismatches": [],
+        "input_sha256": {
+          "schema": "e45ea254cd2a3608ddd40379ecdff902c1a82edb5fc7e90f41cb923346958ce7",
+          "expected": "b00fdec56559ef51a1c163e183fbc9895c8ca3ce64d9db7f0273fd0e66afcb09",
+          "actual": "79db8f315ae1c9725f301451855bf3a6bf3ed9da941a72aead7f47e3aa4a5d5c"
+        },
+        "limitation": "Does not parse wire frames, compute an oracle, or prove classification accuracy."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "changed_value",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "evidence_kind": "normalized_integer_csv",
+        "tensors": 1,
+        "elements": 4,
+        "mismatch_count": 1,
+        "first_mismatches": [
+          {
+            "tensor": "x",
+            "index": 1,
+            "expected": -2,
+            "actual": -3
+          }
+        ],
+        "input_sha256": {
+          "schema": "e45ea254cd2a3608ddd40379ecdff902c1a82edb5fc7e90f41cb923346958ce7",
+          "expected": "b00fdec56559ef51a1c163e183fbc9895c8ca3ce64d9db7f0273fd0e66afcb09",
+          "actual": "b16bf14b007486243bbe1f0c879576b9ee32ac1f7b3122ef778c295a1b76eb6b"
+        },
+        "limitation": "Does not parse wire frames, compute an oracle, or prove classification accuracy."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "missing_tail",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "incomplete tensor x: got 3, expected 4",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "duplicate_index",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "duplicate index at line 6: ('x', 1)",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "unknown_tensor",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "unknown tensor at line 5: y",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "out_of_range_index",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "index/value out of range at line 5",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "out_of_range_value",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "index/value out of range at line 5",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "unknown_logic_value",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "not a canonical decimal integer: 'X'",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "float_value_rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "not a canonical decimal integer: '127.0'",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "extra_column",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "invalid CSV fields at line 5",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "both_files_missing_same_tail",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "incomplete tensor x: got 3, expected 4",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "empty_schema",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "non-empty tensors object required",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "duplicate_json_key",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "duplicate JSON key: schema_version",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "source_hash_equal",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "stdout": {
+        "status": "PASS",
+        "evidence_kind": "file_integrity_only",
+        "checked_files": 1,
+        "failures": [],
+        "limitation": "Does not establish authenticity, measurement correctness, or board state."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "source_hash_changed",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "evidence_kind": "file_integrity_only",
+        "checked_files": 1,
+        "failures": [
+          {
+            "id": "fixture",
+            "kind": "snapshot",
+            "reason": "hash_mismatch",
+            "path": "source.txt"
+          }
+        ],
+        "limitation": "Does not establish authenticity, measurement correctness, or board state."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "source_file_missing",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "evidence_kind": "file_integrity_only",
+        "checked_files": 1,
+        "failures": [
+          {
+            "id": "fixture",
+            "kind": "snapshot",
+            "reason": "missing",
+            "path": "source.txt"
+          }
+        ],
+        "limitation": "Does not establish authenticity, measurement correctness, or board state."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "path_escape_rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "unsafe relative path: ../escape.txt",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "absolute_path_rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "invalid relative path: 'C:/absolute.txt'",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "empty_manifest_rejected",
+      "expected_exit": 1,
+      "actual_exit": 1,
+      "passed": true,
+      "stdout": {
+        "status": "FAIL",
+        "reason": "manifest requires schema_version=1 and non-empty sources",
+        "evidence_kind": "input_rejected"
+      },
+      "stderr": ""
+    },
+    {
+      "name": "relocated_snapshot_verification",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "stdout": {
+        "status": "PASS",
+        "evidence_kind": "file_integrity_only",
+        "checked_files": 9,
+        "failures": [],
+        "limitation": "Does not establish authenticity, measurement correctness, or board state."
+      },
+      "stderr": ""
+    },
+    {
+      "name": "relocated_example_comparison",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "stdout": {
+        "status": "PASS",
+        "evidence_kind": "normalized_integer_csv",
+        "tensors": 3,
+        "elements": 7,
+        "mismatch_count": 0,
+        "first_mismatches": [],
+        "input_sha256": {
+          "schema": "a2c649c06b8af3a32828ae4d8f7a913d99bf61725f5c69ce1b3e143cfb7a11e0",
+          "expected": "5cfe0526424504b3fdae1377627763ad2e5f262382728335c762c3c4cda732b4",
+          "actual": "5cfe0526424504b3fdae1377627763ad2e5f262382728335c762c3c4cda732b4"
+        },
+        "limitation": "Does not parse wire frames, compute an oracle, or prove classification accuracy."
+      },
+      "stderr": ""
+    }
+  ],
+  "hardware_actions": false,
+  "cnn_oracle_rerun": false
+}

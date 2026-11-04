@@ -1,0 +1,15 @@
+# Stage5 结果终端离线验收
+
+电脑端接入与离线验证 PASS；新终端现场串口采集 PENDING。
+
+15项回归全部通过，真实命令退出0；Tk图形界面启动/历史证据加载/四标签页/五分数检查通过，并实际查看波形与统计截图。原有normal、diagnostic、recovery证据回放通过；模型预测错误与数值一致分开显示。
+
+数据后端已移除旧逐层卷积/电脑Pool/GAP/Linear链路，不导入旧stage3_host或IntegerModel；用户真实采集只调用固定版本封存board_cli.py。预检隔离为独立解释器，基线G2通过；HDMI H2仍PENDING时拒绝。没有重启HDMI仿真、改RTL/XDC、生成bit、打开串口或操作FPGA/Flash。
+
+负向检查包括数组篡改、Pool缺尾、通信unknown/CRC错误、job错误、vector hash错误、交付错误、diagnostic伪装normal、不完整中断、错误bit、软件CSV来源混淆/重复。模拟子进程exit3被原样记录，只有一次启动，无自动重试。模拟夹具不是板测证据。
+
+读取原始诊断覆盖三次Conv INT8共98304项、debug acc1536项、两次Pool、GAP128、5 logits及winner；数组逐字节与按顺序读取的帧负载对应。加载身份/计数/会话核对；冻结参考清单及各npy hash验证。显示winner取自winner.bin，CPU argmax只用于核验。
+
+统计分SOFTWARE_OFFLINE与HARDWARE，重复normal/diagnostic/recovery同样本去重。只有一个冻结样本，不能将0/1或1/1称全集准确率。时间按实际计数/50MHz、装载墙钟、内存读事务、端到端分别报告；不输出旧混合推理加速比、softmax置信度。
+
+本报告不取代G3、下载目标/同板连续性、主动中断/完整恢复的独立验收，HDMI物理显示也仍PENDING。现场端口、实际bit与下载声明均需用户提供。
