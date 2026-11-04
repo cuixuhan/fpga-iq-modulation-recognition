@@ -4,7 +4,7 @@
 
 [阅读设计报告 PDF](design_report.pdf) · [下载演示视频 MP4](https://github.com/cuixuhan/fpga-iq-modulation-recognition/raw/refs/heads/main/contest/demo.mp4) · [封版源码 eeba9f7](https://github.com/cuixuhan/fpga-iq-modulation-recognition/tree/eeba9f71ec4658420ed7eae35c255baf9067780d)
 
-材料更新于 2026 年 11 月 4 日。报告为 31 页学术表达润色版；视频约 2 分 48 秒，包含现场操作片段与明确标识的 2026 年 10 月 31 日历史证据回放，并标明中间层证据来源和不含 UART 传输的计算耗时。此次更新不新增板测结论。报告第 9 章链接回本页及源码快照。公开报告保留协作案例，原始会话链接仅在评审附件中提供。
+材料更新于 2026 年 11 月 4 日。报告为 26 页比赛模板五部分版（v4）；视频约 2 分 48 秒，包含现场操作片段与明确标识的 2026 年 10 月 31 日历史证据回放，并标明中间层证据来源和不含 UART 传输的计算耗时。此次更新不新增板测结论。报告按匿名评审要求不附个人仓库或原始会话链接；源码入口以本页为准。报告保留协作案例；原始会话入口见评审附件 evidence/messages.jsonl，正文不放外部链接。
 
 | 评审附件 | 获取方式 | 内容 |
 | --- | --- | --- |
@@ -15,4 +15,4 @@
 
 [项目首页](../README.md) · [源码许可](../LICENSE) · [第三方材料范围](../THIRD_PARTY.md)
 
-[材料版本与 SHA-256 清单](materials_manifest.json) · [公开文件校验](sha256.txt)。公开 PDF 与比赛 PDF 正文及画面一致，原始会话分享链接仅在比赛附件中保留，因此两个 PDF 的文件哈希不同。演示视频在两处完全一致。
+[材料版本与 SHA-256 清单](materials_manifest.json) · [公开文件校验](sha256.txt)。公开 PDF 与比赛 PDF 使用同一份 v4 文件，哈希一致；原始会话入口见评审附件，正文不放外部链接。演示视频在两处完全一致。

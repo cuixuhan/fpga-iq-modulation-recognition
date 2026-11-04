@@ -1,6 +1,7 @@
 {
   "materials_date": "2026-11-04",
-  "report_pages": 31,
+  "report_pages": 26,
+  "report_layout": "competition-five-part-v4",
   "video_duration_seconds": 167.97,
   "video_dimensions": [
     2592,
@@ -9,15 +10,15 @@
   "video_fps": 30,
   "board_evidence_date": "2026-10-31",
   "new_board_validation": false,
-  "private_chat_link_annotations_removed": 3,
+  "private_chat_link_annotations_removed": 0,
   "files": {
     "submission_report": {
-      "bytes": 26403887,
-      "sha256": "a9da24f762044851814f1a0c771e0974e0efbe5d68409b4656ff266e870c37e3"
+      "bytes": 1894392,
+      "sha256": "662a8aaeb079c6b5d53f6699a40b326f5923ccd0911d473c6536042c48995d57"
     },
     "public_report": {
-      "bytes": 14007839,
-      "sha256": "09e4edacc87a652b627c1db97ca4e2b3a7bdf01cce1e5785643075c88124258c"
+      "bytes": 1894392,
+      "sha256": "662a8aaeb079c6b5d53f6699a40b326f5923ccd0911d473c6536042c48995d57"
     },
     "video": {
       "bytes": 21598304,
