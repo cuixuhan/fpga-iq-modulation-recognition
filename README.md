@@ -8,6 +8,8 @@
 
 [报告、演示视频和完整工程校验信息](contest/README.md) · [公开报告 PDF](contest/design_report.pdf) · [封版源码 eeba9f7](https://github.com/cuixuhan/fpga-iq-modulation-recognition/tree/eeba9f71ec4658420ed7eae35c255baf9067780d)。
 
+当前材料版本：2026-11-04，31 页学术表达润色报告与约 2 分 48 秒修订视频。此次仅更新提交材料；硬件结果仍来自原封存证据。
+
 ## 源码与附件
 
 | 目录 | 内容 |

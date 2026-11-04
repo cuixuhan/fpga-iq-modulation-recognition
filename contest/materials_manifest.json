@@ -1,0 +1,31 @@
+{
+  "materials_date": "2026-11-04",
+  "report_pages": 31,
+  "video_duration_seconds": 167.97,
+  "video_dimensions": [
+    2592,
+    1200
+  ],
+  "video_fps": 30,
+  "board_evidence_date": "2026-10-31",
+  "new_board_validation": false,
+  "private_chat_link_annotations_removed": 3,
+  "files": {
+    "submission_report": {
+      "bytes": 26403887,
+      "sha256": "a9da24f762044851814f1a0c771e0974e0efbe5d68409b4656ff266e870c37e3"
+    },
+    "public_report": {
+      "bytes": 14007839,
+      "sha256": "09e4edacc87a652b627c1db97ca4e2b3a7bdf01cce1e5785643075c88124258c"
+    },
+    "video": {
+      "bytes": 21598304,
+      "sha256": "1be8bd74a932395b1458375afc750de56ebd57ac6c3faa85098de2874c4e0e25"
+    },
+    "engineering": {
+      "bytes": 3662358687,
+      "sha256": "cfd64ce46ed11f8a42bff9773412a69ba91e793b04a0c53cba015d013d042853"
+    }
+  }
+}
